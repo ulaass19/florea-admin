@@ -1,9 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import {
+  useEffect,
+  useState,
+} from 'react';
 
-import type { AdminUser } from '@/lib/api';
+import {
+  usePathname,
+  useRouter,
+} from 'next/navigation';
+
+import type { AdminUser } from '@/types/auth';
 
 import {
   clearAuth,
@@ -12,6 +19,7 @@ import {
 
 type TopbarProps = {
   onMenuClick: () => void;
+  title?: string;
 };
 
 function getPageTitle(pathname: string) {
@@ -21,6 +29,14 @@ function getPageTitle(pathname: string) {
 
   if (pathname.startsWith('/categories')) {
     return 'Kategoriler';
+  }
+
+  if (pathname.startsWith('/balloons')) {
+    return 'Balonlar';
+  }
+
+  if (pathname.startsWith('/collections')) {
+    return 'Koleksiyonlar';
   }
 
   if (pathname.startsWith('/orders')) {
@@ -36,6 +52,7 @@ function getPageTitle(pathname: string) {
 
 export default function Topbar({
   onMenuClick,
+  title,
 }: TopbarProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -58,10 +75,13 @@ export default function Topbar({
   const initials =
     user?.name
       ?.split(' ')
-      .map((item) => item[0])
+      .map((item: string) => item[0])
       .join('')
       .slice(0, 2)
       .toUpperCase() ?? 'A';
+
+  const pageTitle =
+    title ?? getPageTitle(pathname);
 
   return (
     <header className="sticky top-0 z-30 flex h-[88px] items-center justify-between border-b border-[#eee8e5] bg-white/90 px-5 backdrop-blur-xl sm:px-8">
@@ -85,7 +105,7 @@ export default function Topbar({
 
         <div>
           <h1 className="text-xl font-semibold tracking-[-0.03em] text-[#33292d] sm:text-[23px]">
-            {getPageTitle(pathname)}
+            {pageTitle}
           </h1>
 
           <p className="mt-1 hidden text-xs text-[#9b9295] sm:block">
@@ -158,11 +178,11 @@ export default function Topbar({
             <div className="absolute right-0 top-[58px] w-64 overflow-hidden rounded-2xl border border-[#ebe4e1] bg-white p-2 shadow-[0_18px_60px_rgba(45,32,37,0.14)]">
               <div className="border-b border-[#f0ebe8] px-3 py-3">
                 <p className="truncate text-sm font-semibold text-[#382e32]">
-                  {user?.name}
+                  {user?.name ?? 'Admin'}
                 </p>
 
                 <p className="mt-1 truncate text-xs text-[#978e91]">
-                  {user?.email}
+                  {user?.email ?? ''}
                 </p>
               </div>
 

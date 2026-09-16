@@ -18,10 +18,12 @@ import Topbar from './Topbar';
 
 type AdminLayoutProps = {
   children: ReactNode;
+  title?: string;
 };
 
 export default function AdminLayout({
   children,
+  title,
 }: AdminLayoutProps) {
   const router = useRouter();
 
@@ -71,6 +73,7 @@ export default function AdminLayout({
           onMenuClick={() =>
             setMobileOpen(true)
           }
+          title={title}
         />
 
         <main className="p-5 sm:p-8">
